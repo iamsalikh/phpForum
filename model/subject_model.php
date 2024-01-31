@@ -9,10 +9,6 @@ class Subject {
     }
 
     public function createSubject($subjectName, $title, $userId){
-        $subjectName = mysqli_real_escape_string($this->dbConnection, $subjectName);
-        $title = mysqli_real_escape_string($this->dbConnection, $title);
-        $userId = mysqli_real_escape_string($this->dbConnection, $userId);
-
         $stmt = $this->dbConnection->prepare("INSERT INTO tb_subject (subjectName, title, user_id) VALUES (?, ?, ?)");
         $stmt->bind_param('ssi', $subjectName, $title, $userId);
 
