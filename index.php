@@ -8,6 +8,7 @@
     <title>Document</title>
 </head>
 <body>
-<a href="../controller/user_controller.php">Выйти из системы</a>
+<a href="view/user_login.php">login</a>
+<a href="view/user_register.php">register</a>
 </body>
 </html>

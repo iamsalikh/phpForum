@@ -17,6 +17,7 @@ class UserController {
         $result = $this->userModel->register($name, $username, $email, $password, $confirmPassword);
         if ($result == 1){
             header("Location: index.php");
+            exit();
         } elseif ($result == 10){
             echo 'Пользователь с таким именем пользователя или почтой уже существует.';
         } elseif ($result == 100){
@@ -33,6 +34,7 @@ class UserController {
         $result = $this->userModel->login($usernameemail, $password);
         if ($result == 1){
             header('Location: index.php');
+            exit();
         } elseif ($result == 10){
             echo 'Неверный пароль';
         } elseif ($result == 100){
