@@ -6,7 +6,7 @@ class SubjectController {
         $this->subjectModel = $subjectModel;
     }
 
-    public function create() {
+    public function createSubject() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $subjectName = $_POST['subjectName'] ?? '';
             $title = $_POST['title'] ?? '';
@@ -14,8 +14,7 @@ class SubjectController {
 
             $result = $this->subjectModel->createSubject($subjectName, $title, $userId);
             if ($result !== false) {
-                header('Location: path_to_success_page.php');
-                exit();
+                return true;
             } else {
                 $_SESSION['error'] = 'Не удалось создать тему.';
                 header('Location: error_page.php'); // Укажите путь к странице ошибки
@@ -24,12 +23,12 @@ class SubjectController {
         }
     }
 
-    public function listSubjects() {
+    public function viewSubjects() {
         $subjects = $this->subjectModel->viewSubjects();
         return $subjects;
     }
 
-    public function show($subjectId) {
+    public function viewSubjectById($subjectId) {
         $subject = $this->subjectModel->viewSubjectById($subjectId);
         return $subject;
     }
