@@ -1,54 +1,91 @@
 <?php
+session_start();
+
+require_once '../model/database.php';
+require '../model/user_model.php';
+
+$action = $_POST['action'];
+$userController = new UserController();
+if($action == 'register'){
+    $userController->register($_POST);
+} elseif($action == 'login'){
+    $userController->login($_POST);
+} elseif ($action == 'logout'){
+    $userController->logout();
+} else {
+    header('/phpForum/error_page.php');
+    exit();
+}
+
 class UserController {
     private $userModel;
 
-    public function __construct(User $userModel) {
-        $this->userModel = $userModel;
+    public function __construct() {
+        $conn = new Connection();
+        $this->userModel = new User($conn);
     }
 
-    public function register() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'] ?? '';
-            $username = $_POST['username'] ?? '';
-            $email = $_POST['email'] ?? '';
-            $password = $_POST['password'] ?? '';
-            $confirmPassword = $_POST['confirmPassword'] ?? '';
+    public function register($post) {
+        $name = $post['name'] ?? '';
+        $username = $post['username'] ?? '';
+        $email = $post['email'] ?? '';
+        $password = $post['password'] ?? '';
+        $confirmPassword = $post['confirmPassword'] ?? '';
 
-            $result = $this->userModel->register($name, $username, $email, $password, $confirmPassword);
-
-            if ($result == 1) {
-                header('Location: index.php'); // Перенаправление на страницу успешной регистрации
-                exit();
-            } elseif ($result == 10) {
-                echo "Пользователь с таким именем пользователя или электронной почтой уже существует.";
-            } elseif ($result == 100) {
-                echo "Введенные пароли не совпадают.";
-            } else {
-                echo "Произошла ошибка при регистрации пользователя.";
-            }
+        $result = $this->userModel->register($name, $username, $email, $password, $confirmPassword);
+        if ($result == 1) {
+            $_SESSION['user_id'] = $this->userModel->idUser();
+            header('Location: ../index.php');
+            exit();
+        } elseif ($result == 10) {
+            echo
+            "<script> 
+            alert('Пользователь с таким именем пользователя или электронной почтой уже существует.'); 
+            window.location.href='../view/user_register.php';
+        </script>";
+        } elseif ($result == 100) {
+            echo
+            "<script> 
+            alert('Введенные пароли не совпадают.'); 
+            window.location.href='../view/user_register.php';
+        </script>";
+        } else {
+            echo
+            "<script> 
+            alert('Произошла ошибка при регистрации пользователя.'); 
+            window.location.href='../view/user_register.php';
+        </script>";
         }
     }
 
-    public function login() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $usernameemail = $_POST['usernameemail'] ?? '';
-            $password = $_POST['password'] ?? '';
+    public function login($post) {
+        $usernameemail = $post['usernameemail'] ?? '';
+        $password = $post['password'] ?? '';
 
-            $result = $this->userModel->login($usernameemail, $password);
+        $result = $this->userModel->login($usernameemail, $password);
 
-            if ($result == 1) {
-                // Вход успешен
-                session_start();
-                $_SESSION['user_id'] = $this->userModel->idUser();
-                header('Location: index.php');
-                exit();
-            } elseif ($result == 10) {
-                echo "Неверный пароль.";
-            } elseif ($result == 100) {
-                echo "Пользователь с таким именем или электронной почтой не найден.";
-            } else {
-                echo "Произошла ошибка при входе в систему.";
-            }
+        if ($result == 1) {
+            $_SESSION['user_id'] = $this->userModel->idUser();
+            header('Location: ../index.php');
+            exit();
+        } elseif ($result == 10) {
+            echo
+            "<script> 
+            alert('Неверный пароль.'); 
+            window.location.href='../view/user_login.php';
+        </script>";
+        } elseif ($result == 100) {
+            echo
+            "<script> 
+            alert('Пользователь с таким именем или электронной почтой не найден.'); 
+            window.location.href='../view/user_login.php';
+        </script>";
+        } else {
+            echo
+            "<script> 
+            alert('Произошла ошибка при входе в систему.'); 
+            window.location.href='../view/user_login.php';
+        </script>";
         }
     }
 
@@ -56,7 +93,7 @@ class UserController {
         session_start();
         $_SESSION = array();
         session_destroy();
-        header('Location: login.php');
+        header('Location: ../view/user_login.php');
         exit();
     }
 }

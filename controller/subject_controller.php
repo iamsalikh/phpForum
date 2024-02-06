@@ -1,25 +1,46 @@
 <?php
+session_start();
+
+require_once __DIR__ . '/../model/database.php';
+require_once __DIR__ . '/../model/subject_model.php';
+
+$action = $_POST['action'] ?? null;
+$subjectController = new SubjectController();
+if ($action == 'create') {
+    $subjectController->createSubject($_POST);
+}
+
 class SubjectController {
     private $subjectModel;
 
-    public function __construct(Subject $subjectModel){
-        $this->subjectModel = $subjectModel;
+    public function __construct() {
+        $conn = new Connection();
+        $this->subjectModel = new Subject($conn);
     }
 
-    public function createSubject() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $subjectName = $_POST['subjectName'] ?? '';
-            $title = $_POST['title'] ?? '';
-            $userId = $_POST['userId'] ?? 0;
+    public function createSubject($post) {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-            $result = $this->subjectModel->createSubject($subjectName, $title, $userId);
+        if (isset($_SESSION['user_id']) && $_SESSION['user_id'] > 0) {
+            $subjectName = $post['subjectName'] ?? '';
+            $title = $post['title'] ?? '';
+            $user_id = $_SESSION['user_id'];
+
+            $result = $this->subjectModel->createSubject($subjectName, $title, $user_id);
             if ($result !== false) {
-                return true;
+                header('Location: /phpForum/index.php');
+                exit();
             } else {
                 $_SESSION['error'] = 'Не удалось создать тему.';
-                header('Location: error_page.php'); // Укажите путь к странице ошибки
+                header('Location: /phpForum/error_page.php');
                 exit();
             }
+        } else {
+            $_SESSION['error'] = 'Вы должны войти в систему, чтобы создать тему.';
+            header('Location: ../view/user_login.php');
+            exit();
         }
     }
 

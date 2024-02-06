@@ -1,5 +1,5 @@
 <?php
-require 'database.php';
+require_once 'database.php';
 
 class User {
     private $dbConnection;
@@ -86,4 +86,3 @@ class User {
         }
     }
 }
-?>
