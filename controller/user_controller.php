@@ -1,10 +1,12 @@
 <?php
+namespace phpForum\Controller;
+
+use phpForum\Model\User;
+use phpForum\Model\Connection;
+
 session_start();
 
-require_once '../model/database.php';
-require_once '../model/user_model.php';
-
-$action = $_POST['action'];
+$action = $_POST['action'] ?? '';
 $userController = new UserController();
 if($action == 'register'){
     $userController->register($_POST);
@@ -13,7 +15,7 @@ if($action == 'register'){
 } elseif ($action == 'logout'){
     $userController->logout();
 } else {
-    header('/phpForum/error_page.php');
+    header('Location: /phpForum/error_page.php');
     exit();
 }
 

@@ -1,9 +1,11 @@
 <?php
-session_start();
+require_once __DIR__ . '/vendor/autoload.php';
 
-require_once 'controller/subject_controller.php';
-require_once 'model/user_model.php';
-require_once 'model/database.php';
+use phpForum\Controller\SubjectController;
+use phpForum\Model\User;
+use phpForum\Model\Connection;
+
+session_start();
 
 $conn = new Connection();
 $select = new User($conn);

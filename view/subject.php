@@ -1,11 +1,10 @@
 <?php
 session_start();
 
-require_once '../controller/subject_controller.php';
-require_once '../controller/comment_controller.php';
-require_once '../model/user_model.php';
-require_once __DIR__ . '/../model/database.php';
-
+use phpForum\Model\User;
+use phpForum\Model\Connection;
+use phpForum\Controller\SubjectController;
+use phpForum\Controller\CommentController;
 
 $conn = new Connection();
 $select = new User($conn);

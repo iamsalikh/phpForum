@@ -1,0 +1,8 @@
+{
+  "autoload": {
+    "psr-4": {
+      "phpForum\\Model\\": "model/",
+      "phpForum\\Controller\\": "controller/"
+    }
+  }
+}

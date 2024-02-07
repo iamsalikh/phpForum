@@ -1,4 +1,9 @@
 <?php
+namespace phpForum\Model;
+
+use Exception;
+use mysqli;
+
 class Connection
 {
     private $host;

@@ -1,6 +1,8 @@
 <?php
-require_once __DIR__ . '/../model/database.php';
-require_once __DIR__ . '/../model/subject_model.php';
+namespace phpForum\Controller;
+
+use phpForum\Model\Subject;
+use phpForum\Model\Connection;
 
 $action = $_POST['action'] ?? null;
 $subjectController = new SubjectController();

@@ -1,5 +1,5 @@
 <?php
-require_once 'database.php';
+namespace phpForum\Model;
 
 class User {
     private $dbConnection;

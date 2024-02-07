@@ -1,6 +1,8 @@
 <?php
-require_once '../model/comment_model.php';
-require_once '../model/database.php';
+namespace phpForum\Controller;
+
+use phpForum\Model\Comment;
+use phpForum\Model\Connection;
 
 if(isset($_POST['action'])) {
     $action = $_POST['action'];
