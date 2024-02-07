@@ -1,5 +1,5 @@
 <?php
-require 'database.php';
+require_once 'database.php';
 
 class Comment {
     private $dbConnection;
@@ -21,7 +21,7 @@ class Comment {
     }
 
     public function viewCommentsBySubjectId($subjectId){
-        $stmt = $this->dbConnection->prepare("SELECT * FROM tb_comment WHERE subject_id = ? ORDER BY timstamp DESC");
+        $stmt = $this->dbConnection->prepare("SELECT * FROM tb_comment WHERE subject_id = ? ORDER BY timestamp DESC");
         $stmt->bind_param('i', $subjectId);
         $stmt->execute();
         $result = $stmt->get_result();

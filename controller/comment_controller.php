@@ -1,26 +1,49 @@
 <?php
+require_once '../model/comment_model.php';
+require_once '../model/database.php';
+
+if(isset($_POST['action'])) {
+    $action = $_POST['action'];
+    $commentController = new CommentController();
+
+    if ($action == 'add') {
+        $commentController->addComment($_POST);
+    }
+}
+
 class CommentController {
     private $commentModel;
 
-    public function __construct(Comment $commentController){
-        $this->commentModel = $commentController;
+    public function __construct(){
+        $conn = new Connection();
+        $this->commentModel = new Comment($conn);
     }
 
-    public function addComment(){
-        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $subjectId = $_POST['subjectId'];
-            $userId = $_POST['userId'];
-            $content = $_POST['content'];
-            $timestamp = $_POST['timestamp'];
+    public function addComment($post){
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-            $result = $this->commentModel->addComment($subjectId, $userId, $content, $timestamp);
-            if($result !== false){
-                return true;
-            } else {
-                $_SESSION['error'] = 'Не удалось добавить комментарий';
-                header('Location: error_page.php');
-                exit();
-            }
+        if (!isset($post['subjectId']) || !isset($post['content'])) {
+            $_SESSION['error'] = 'Ошибка: Недостаточно данных для добавления комментария';
+            header('Location: ../error_page.php');
+            exit();
+        }
+
+        $subjectId = $post['subjectId'];
+        $userId = $_SESSION['user_id'] ?? null;
+        $content = $post['content'];
+        $timestamp = date('Y-m-d H:i:s');
+
+        $result = $this->commentModel->addComment($subjectId, $userId, $content, $timestamp);
+
+        if ($result !== false) {
+            header('Location: ../view/subject.php?id=' . $subjectId);
+            exit();
+        } else {
+            $_SESSION['error'] = 'Не удалось добавить комментарий';
+            header('Location: ../error_page.php');
+            exit();
         }
     }
 

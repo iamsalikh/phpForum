@@ -2,7 +2,7 @@
 session_start();
 
 require_once '../model/database.php';
-require '../model/user_model.php';
+require_once '../model/user_model.php';
 
 $action = $_POST['action'];
 $userController = new UserController();

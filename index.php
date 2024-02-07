@@ -1,6 +1,9 @@
 <?php
+session_start();
+
 require_once 'controller/subject_controller.php';
 require_once 'model/user_model.php';
+require_once 'model/database.php';
 
 $conn = new Connection();
 $select = new User($conn);
@@ -80,9 +83,7 @@ $subjects = $subjectsController->viewSubjects();
         var logoutMenu = document.querySelector('.user-menu');
 
         username.addEventListener('click', function (event) {
-            // Предотвращаем распространение клика дальше по DOM
             event.stopPropagation();
-            // Показываем или скрываем меню
             logoutMenu.style.display = logoutMenu.style.display === 'block' ? 'none' : 'block';
         });
 

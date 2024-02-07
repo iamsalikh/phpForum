@@ -41,8 +41,7 @@ class Subject {
         $stmt->execute();
         $result = $stmt->get_result();
 
-        $subject = $result->fetch_assoc();
-        return $subject;
+        return $result->fetch_assoc();
     }
 }
 
