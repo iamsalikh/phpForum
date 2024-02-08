@@ -1,6 +1,8 @@
 <?php
 namespace phpForum\Controller;
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 use phpForum\Model\Comment;
 use phpForum\Model\Connection;
 
@@ -13,7 +15,7 @@ if(isset($_POST['action'])) {
     }
 }
 
-class CommentController {
+class CommentController{
     private $commentModel;
 
     public function __construct(){

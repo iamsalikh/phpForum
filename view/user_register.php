@@ -8,7 +8,7 @@
 <body>
 <div class="form-container">
     <h2>Регистрация</h2>
-    <form action="../controller/user_controller.php" method="post">
+    <form action="../controller/UserController.php" method="post">
         <input type="hidden" name="action" value="register">
         <div>
             <label for="name">Имя:</label>

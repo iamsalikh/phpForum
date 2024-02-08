@@ -1,6 +1,8 @@
 <?php
 namespace phpForum\Controller;
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 use phpForum\Model\User;
 use phpForum\Model\Connection;
 
@@ -19,7 +21,7 @@ if($action == 'register'){
     exit();
 }
 
-class UserController {
+class UserController{
     private $userModel;
 
     public function __construct() {

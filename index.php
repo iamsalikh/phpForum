@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-use phpForum\Controller\SubjectController;
+use phpForum\Model\Subject;
 use phpForum\Model\User;
 use phpForum\Model\Connection;
 
@@ -16,7 +16,7 @@ if(isset($_SESSION['user_id'])){
 }
 
 
-$subjectsController = new SubjectController();
+$subjectsController = new Subject($conn);
 $subjects = $subjectsController->viewSubjects();
 ?>
 <!doctype html>
@@ -36,7 +36,7 @@ $subjects = $subjectsController->viewSubjects();
         <?php if ($user): ?>
             <span class="username"><?= htmlspecialchars($user['username']); ?></span>
             <div class="user-menu">
-                <form action="controller/user_controller.php" method="post">
+                <form action="controller/UserController.php" method="post">
                     <input type="hidden" name="action" value="logout">
                     <button type="submit" class="logout-button">Выйти из системы</button>
                 </form>
@@ -53,7 +53,7 @@ $subjects = $subjectsController->viewSubjects();
 <div class="container my-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <form action="controller/subject_controller.php" method="post">
+            <form action="controller/SubjectController.php" method="post">
                 <input type="hidden" name="action" value="create">
                 <input type="text" name="subjectName" placeholder="Name of your subject" class="form-control" required>
                 <input type="text" name="title" placeholder="Write your subject" class="form-control" required>

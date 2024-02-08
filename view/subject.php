@@ -1,21 +1,24 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
 session_start();
+
 
 use phpForum\Model\User;
 use phpForum\Model\Connection;
-use phpForum\Controller\SubjectController;
-use phpForum\Controller\CommentController;
+use phpForum\Model\Subject;
+use phpForum\Model\Comment;
 
 $conn = new Connection();
-$select = new User($conn);
+$userModel = new User($conn);
 
 if(isset($_GET['id'])) {
     $subjectId = $_GET['id'];
 
-    $subjectController = new SubjectController();
+    $subjectController = new Subject($conn);
     $subject = $subjectController->viewSubjectById($subjectId);
 
-    $commentController = new CommentController();
+    $commentController = new Comment($conn);
     $comments = $commentController->viewCommentsBySubjectId($subjectId);
 } else {
     echo
@@ -25,7 +28,7 @@ if(isset($_GET['id'])) {
 
 $user = null;
 if(isset($_SESSION['user_id'])){
-    $user = $select->selectUserById($_SESSION['user_id']);
+    $user = $userModel->selectUserById($_SESSION['user_id']);
 }
 
 ?>
@@ -48,7 +51,7 @@ if(isset($_SESSION['user_id'])){
             <?php if ($user): ?>
                 <span class="username"><?= htmlspecialchars($user['username']); ?></span>
                 <div class="user-menu">
-                    <form action="../controller/user_controller.php" method="post">
+                    <form action="../controller/UserController.php" method="post">
                         <input type="hidden" name="action" value="logout">
                         <button type="submit" class="logout-button">Выйти из системы</button>
                     </form>
@@ -68,7 +71,7 @@ if(isset($_SESSION['user_id'])){
                     <div class="card-body">
                         <h5 class="card-title"><?= htmlspecialchars($subject['subjectName']) ?></h5>
                         <p class="card-text"><?= htmlspecialchars($subject['title']) ?></p>
-                        <p class="text-muted">Created by: <?= htmlspecialchars($select->getUsernameByUserId($subject['user_id'])) ?></p>
+                        <p class="text-muted">Created by: <?= htmlspecialchars($userModel->getUsernameByUserId($subject['user_id'])) ?></p>
                     </div>
                 </div>
             </div>
@@ -79,10 +82,10 @@ if(isset($_SESSION['user_id'])){
 <div class="container my-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <form action="../controller/comment_controller.php" method="post">
+            <form action="../controller/CommentController.php" method="post">
                 <input type="hidden" name="action" value="add">
                 <input type="hidden" name="subjectId" value="<?= htmlspecialchars($subjectId); ?>">
-                <input type="hidden" name="userId" value="<?= htmlspecialchars($_SESSION['user_id']); ?>">
+                <input type="hidden" name="userId" value="<?= isset($_SESSION['user_id']) ? htmlspecialchars($_SESSION['user_id']): '' ?>">
                 <input type="text" name="content" placeholder="Add your comment" class="form-control" required>
                 <button type="submit" class="btn btn-success">Add</button>
             </form>
@@ -97,7 +100,7 @@ if(isset($_SESSION['user_id'])){
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title"><?= htmlspecialchars($select->getUsernameByUserId($comment['user_id'])) ?></h5>
+                        <h5 class="card-title"><?= htmlspecialchars($userModel->getUsernameByUserId($comment['user_id'])) ?></h5>
                         <p class="card-text"><?= htmlspecialchars($comment['content']) ?></p>
                         <p class="text-muted">Posted on: <?= date("Y-m-d H:i:s", strtotime($comment['timestamp'])) ?></p>
                     </div>

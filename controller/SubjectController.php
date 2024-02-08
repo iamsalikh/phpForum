@@ -1,6 +1,8 @@
 <?php
 namespace phpForum\Controller;
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 use phpForum\Model\Subject;
 use phpForum\Model\Connection;
 
@@ -10,7 +12,7 @@ if ($action == 'create') {
     $subjectController->createSubject($_POST);
 }
 
-class SubjectController {
+class SubjectController{
     private $subjectModel;
 
     public function __construct() {

@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="form-container">
-    <form action="../controller/user_controller.php" method="post">
+    <form action="../controller/UserController.php" method="post">
         <input type="hidden" name="action" value="login">
         <input type="text" name="usernameemail" placeholder="Имя пользователя или Электронная почта" required>
         <input type="password" name="password" placeholder="Пароль" required>
